@@ -1,11 +1,11 @@
 :root {
-  --bg: #0b1020;
-  --card: #111735;
-  --text: #e7e9ee;
-  --muted: #9aa3b2;
-  --primary: #5b8cff;
-  --border: #2a3357;
-  --ring: #7aa2ff;
+  --bg: #ffffff;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --primary: #1f6feb;
+  --border: #e2e8f0;
+  --ring: #3b82f6;
 }
 
 * { box-sizing: border-box; }
@@ -40,14 +40,14 @@ h1 {
   border-radius: 12px;
   margin-top: 16px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 label { display: block; font-weight: 600; margin-bottom: 8px; }
 
 input[type="text"], select, textarea, input[type="file"] {
   width: 100%;
-  background: #0d1330;
+  background: #ffffff;
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -70,22 +70,20 @@ input[type="text"]:focus, select:focus, textarea:focus {
 button {
   appearance: none;
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, #5b8cff, #3c6df5);
-  color: white;
+  background: linear-gradient(180deg, #1f6feb, #1c58c7);
+  color: #ffffff;
   border-radius: 10px;
   padding: 10px 16px;
   font-weight: 600;
   cursor: pointer;
 }
 
-button#btn-translate { background: linear-gradient(180deg, #2b334d, #202741); }
+button#btn-translate { background: linear-gradient(180deg, #e2e8f0, #cbd5e1); color: #0f172a; }
 button#btn-translate:hover { filter: brightness(1.1); }
 button#btn-submit:hover { filter: brightness(1.1); }
 
 .status { margin-top: 12px; min-height: 20px; color: var(--muted); }
 
-textarea[readonly] {
-  background: #0a0f24;
-}
+textarea[readonly] { background: #f8fafc; }
 
 

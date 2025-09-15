@@ -168,86 +168,28 @@ function normalizeSourceLangForApi(uiLang) {
   return uiLang;
 }
 
-async function populateLanguages() {
-  // Show a temporary loading option
+function setFixedLanguages() {
+  const options = [
+    { code: "en", name: "English" },
+    { code: "es", name: "Español" },
+    { code: "fr", name: "Français" },
+    { code: "de", name: "Deutsch" },
+    { code: "vi", name: "Tiếng Việt" },
+    { code: "zh-TW", name: "繁體中文" },
+    { code: "zh-CN", name: "简体中文" },
+  ];
   els.language.innerHTML = "";
-  const loading = document.createElement("option");
-  loading.value = "en";
-  loading.textContent = "Loading languages...";
-  els.language.appendChild(loading);
-
-  try {
-    const res = await fetch("https://libretranslate.com/languages");
-    if (!res.ok) throw new Error("Failed to load languages");
-    const langs = await res.json(); // [{code:"en", name:"English"}, ...]
-
-    // Build a set to avoid duplicates
-    const seen = new Set();
-    els.language.innerHTML = "";
-
-    // Ensure English first
-    const english = langs.find(l => l.code === "en") || { code: "en", name: "English" };
-    const enOpt = document.createElement("option");
-    enOpt.value = english.code;
-    enOpt.textContent = english.name || "English";
-    els.language.appendChild(enOpt);
-    seen.add("en");
-
-    // Insert others, skipping zh (we'll add variants below) and en which is added
-    for (const l of langs) {
-      if (!l || !l.code) continue;
-      if (l.code === "en" || l.code === "zh" || seen.has(l.code)) continue;
-      const opt = document.createElement("option");
-      opt.value = l.code;
-      opt.textContent = l.name || l.code;
-      els.language.appendChild(opt);
-      seen.add(l.code);
-    }
-
-    // Handle Chinese variants
-    const zhTw = document.createElement("option");
-    zhTw.value = "zh-TW";
-    zhTw.textContent = "繁體中文";
-    els.language.appendChild(zhTw);
-
-    const zhCn = document.createElement("option");
-    zhCn.value = "zh-CN";
-    zhCn.textContent = "简体中文";
-    els.language.appendChild(zhCn);
-
-    // Default to English
-    els.language.value = "en";
-    applyLanguage("en");
-  } catch (e) {
-    // Fallback to a minimal set if fetch fails
-    const fallback = [
-      { code: "en", name: "English" },
-      { code: "es", name: "Español" },
-      { code: "fr", name: "Français" },
-      { code: "de", name: "Deutsch" },
-      { code: "vi", name: "Tiếng Việt" },
-    ];
-    els.language.innerHTML = "";
-    for (const l of fallback) {
-      const opt = document.createElement("option");
-      opt.value = l.code;
-      opt.textContent = l.name;
-      els.language.appendChild(opt);
-    }
-    const zhTw = document.createElement("option");
-    zhTw.value = "zh-TW";
-    zhTw.textContent = "繁體中文";
-    els.language.appendChild(zhTw);
-    const zhCn = document.createElement("option");
-    zhCn.value = "zh-CN";
-    zhCn.textContent = "简体中文";
-    els.language.appendChild(zhCn);
-    els.language.value = "en";
-    applyLanguage("en");
+  for (const l of options) {
+    const opt = document.createElement("option");
+    opt.value = l.code;
+    opt.textContent = l.name;
+    els.language.appendChild(opt);
   }
+  els.language.value = "en";
+  applyLanguage("en");
 }
 
-populateLanguages();
+setFixedLanguages();
 
 async function translateToEnglish() {
   const lang = els.language.value;
@@ -269,13 +211,16 @@ async function translateToEnglish() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sourceLanguage: normalizeSourceLangForApi(lang), targetLanguage: "en", text }),
     });
-    if (!res.ok) throw new Error("Translate failed");
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const detail = data && (data.detail || data.error);
+      throw new Error(detail || "Translate failed");
+    }
     els.translation.value = data.translatedText || "";
     els.status.textContent = t.ready;
   } catch (err) {
     console.error(err);
-    els.status.textContent = "Translation failed.";
+    els.status.textContent = (err && err.message) ? `Translation failed: ${err.message}` : "Translation failed.";
   }
 }
 

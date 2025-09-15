@@ -1,4 +1,4 @@
-// Vercel serverless function for translation via LibreTranslate
+// Vercel serverless function for translation via Microsoft Translator (Azure)
 // Expects POST { sourceLanguage, targetLanguage, text } and returns { translatedText }
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
@@ -23,28 +23,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const endpoint = process.env.LIBRETRANSLATE_ENDPOINT || "https://libretranslate.com/translate";
-    const apiKey = process.env.LIBRETRANSLATE_API_KEY; // optional
-    const payload: Record<string, unknown> = {
-      q: text,
-      source: sourceLanguage || "auto",
-      target: targetLanguage,
-      format: "text",
-      alternatives: 0,
-    };
-    if (apiKey) payload.api_key = apiKey;
+    const endpointBase = process.env.AZURE_TRANSLATOR_ENDPOINT || "https://api.cognitive.microsofttranslator.com";
+    const subscriptionKey = process.env.AZURE_TRANSLATOR_KEY;
+    const region = process.env.AZURE_TRANSLATOR_REGION;
 
-    const response = await fetch(endpoint, {
+    if (!subscriptionKey || !region) {
+      return res.status(500).json({ error: "Missing Azure Translator credentials", detail: "Set AZURE_TRANSLATOR_KEY and AZURE_TRANSLATOR_REGION" });
+    }
+
+    const params = new URLSearchParams({ "api-version": "3.0", to: targetLanguage });
+    if (sourceLanguage && sourceLanguage !== "auto") {
+      params.set("from", sourceLanguage);
+    }
+
+    const url = `${endpointBase}/translate?${params.toString()}`;
+    const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        "Ocp-Apim-Subscription-Key": subscriptionKey,
+        "Ocp-Apim-Subscription-Region": region,
+      },
+      body: JSON.stringify([{ Text: text }]),
     });
     if (!response.ok) {
       const errText = await response.text().catch(() => "");
       return res.status(502).json({ error: "Translation upstream failed", detail: errText });
     }
-    const data = await response.json() as { translatedText?: string };
-    return res.status(200).json({ translatedText: data.translatedText || "" });
+    const data = await response.json() as Array<{ translations?: Array<{ text: string }> }>;
+    const translated = data?.[0]?.translations?.[0]?.text || "";
+    return res.status(200).json({ translatedText: translated });
   } catch (e: any) {
     return res.status(500).json({ error: "Translation error", detail: e?.message || String(e) });
   }
