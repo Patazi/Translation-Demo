@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Ideas Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="container">
+        <h1 id="title">User Ideas</h1>
+        <p id="subtitle" class="muted">Collect ideas and translate to English</p>
+    </header>
+
+    <main class="container card">
+        <form id="idea-form">
+            <div class="field">
+                <label for="language" id="label-language">Language</label>
+                <select id="language" name="language">
+                    <option value="en" selected>English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="zh-CN">简体中文</option>
+                </select>
+            </div>
+
+            <div class="field two-col">
+                <div>
+                    <label for="eid" id="label-eid">EID / Contract ID</label>
+                    <input id="eid" name="eid" type="text" placeholder="e.g. E12345" autocomplete="off">
+                </div>
+                <div>
+                    <label for="subject" id="label-subject">Subject</label>
+                    <input id="subject" name="subject" type="text" placeholder="Short summary" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="description" id="label-description">Description</label>
+                <textarea id="description" name="description" rows="6" placeholder="Describe your idea..."></textarea>
+                <div class="hint" id="hint-description">Translation will target English</div>
+            </div>
+
+            <div class="field">
+                <label for="translation" id="label-translation">Translation (English)</label>
+                <textarea id="translation" name="translation" rows="6" placeholder="Translated text will appear here" readonly></textarea>
+            </div>
+
+            <div class="field">
+                <label for="attachment" id="label-attachment">Attachment</label>
+                <input id="attachment" name="attachment" type="file" />
+            </div>
+
+            <div class="actions">
+                <button type="button" id="btn-translate">Translate</button>
+                <button type="submit" id="btn-submit">Submit</button>
+            </div>
+
+            <div class="status" id="status" aria-live="polite"></div>
+        </form>
+    </main>
+
+    <footer class="container muted small">Built for Vercel free tier. No backend database.</footer>
+
+    <script src="/app.js" type="module"></script>
+</body>
+</html>
+
+
