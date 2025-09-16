@@ -3,6 +3,7 @@ const UI_TEXT = {
     title: "User Ideas",
     subtitle: "Collect ideas and translate to English",
     language: "Language",
+    name: "Name",
     eid: "EID / Contract ID",
     subject: "Subject",
     description: "Description",
@@ -20,6 +21,7 @@ const UI_TEXT = {
     title: "Ideas de usuarios",
     subtitle: "Recopila ideas y tradúcelas al inglés",
     language: "Idioma",
+    name: "Nombre",
     eid: "EID / ID de contrato",
     subject: "Asunto",
     description: "Descripción",
@@ -37,6 +39,7 @@ const UI_TEXT = {
     title: "Idées des utilisateurs",
     subtitle: "Collecter des idées et traduire en anglais",
     language: "Langue",
+    name: "Nom",
     eid: "EID / ID de contrat",
     subject: "Sujet",
     description: "Description",
@@ -54,6 +57,7 @@ const UI_TEXT = {
     title: "Ideen der Nutzer",
     subtitle: "Ideen sammeln und ins Englische übersetzen",
     language: "Sprache",
+    name: "Name",
     eid: "EID / Vertrags-ID",
     subject: "Betreff",
     description: "Beschreibung",
@@ -71,6 +75,7 @@ const UI_TEXT = {
     title: "Ý tưởng của người dùng",
     subtitle: "Thu thập ý tưởng và dịch sang tiếng Anh",
     language: "Ngôn ngữ",
+    name: "Họ tên",
     eid: "EID / Mã hợp đồng",
     subject: "Chủ đề",
     description: "Mô tả",
@@ -88,6 +93,7 @@ const UI_TEXT = {
     title: "使用者想法",
     subtitle: "收集想法並翻譯成英文",
     language: "語言",
+    name: "姓名",
     eid: "EID / 合約編號",
     subject: "主旨",
     description: "描述",
@@ -105,6 +111,7 @@ const UI_TEXT = {
     title: "用户想法",
     subtitle: "收集想法并翻译成英文",
     language: "语言",
+    name: "姓名",
     eid: "EID / 合同编号",
     subject: "主题",
     description: "描述",
@@ -125,6 +132,7 @@ const els = {
   title: document.getElementById("title"),
   subtitle: document.getElementById("subtitle"),
   language: document.getElementById("language"),
+  name: document.getElementById("name"),
   eid: document.getElementById("eid"),
   subject: document.getElementById("subject"),
   description: document.getElementById("description"),
@@ -135,6 +143,7 @@ const els = {
   btnSubmit: document.getElementById("btn-submit"),
   // labels
   labelLanguage: document.getElementById("label-language"),
+  labelName: document.getElementById("label-name"),
   labelEid: document.getElementById("label-eid"),
   labelSubject: document.getElementById("label-subject"),
   labelDescription: document.getElementById("label-description"),
@@ -148,6 +157,7 @@ function applyLanguage(lang) {
   els.title.textContent = t.title;
   els.subtitle.textContent = t.subtitle;
   els.labelLanguage.textContent = t.language;
+  els.labelName.textContent = t.name;
   els.labelEid.textContent = t.eid;
   els.labelSubject.textContent = t.subject;
   els.labelDescription.textContent = t.description;
